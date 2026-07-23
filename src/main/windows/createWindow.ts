@@ -20,6 +20,10 @@ export function createWindow(): BrowserWindow {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false,
     },
+    // kiosk: true,
+    // alwaysOnTop: true,
+    // closable: false,
+    // center: true,
   });
 
   window.on(WindowEvents.ReadyToShow, () => {
