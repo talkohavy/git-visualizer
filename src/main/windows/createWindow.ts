@@ -1,0 +1,43 @@
+import { join } from 'path';
+import { is } from '@electron-toolkit/utils';
+import { WindowEvents } from '@root/common/constants';
+import { BrowserWindow, shell } from 'electron';
+// @ts-ignore - handled by electron-vite's ?asset loader
+import icon from '../../../resources/icon.png?asset';
+
+/**
+ * Creates the main application window and wires its lifecycle. Extracted from
+ * the bootstrap so `index.ts` stays focused on app-level orchestration.
+ */
+export function createWindow(): BrowserWindow {
+  const window = new BrowserWindow({
+    width: 900,
+    height: 670,
+    show: false,
+    autoHideMenuBar: true,
+    ...(process.platform === 'linux' ? { icon } : {}),
+    webPreferences: {
+      preload: join(__dirname, '../preload/index.js'),
+      sandbox: false,
+    },
+  });
+
+  window.on(WindowEvents.ReadyToShow, () => {
+    window.show();
+  });
+
+  // Open external links in the user's browser, not inside the app window.
+  window.webContents.setWindowOpenHandler((details) => {
+    shell.openExternal(details.url);
+    return { action: 'deny' };
+  });
+
+  // HMR for the renderer in dev; the built file in production.
+  if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
+    window.loadURL(process.env['ELECTRON_RENDERER_URL']);
+  } else {
+    window.loadFile(join(__dirname, '../renderer/index.html'));
+  }
+
+  return window;
+}
