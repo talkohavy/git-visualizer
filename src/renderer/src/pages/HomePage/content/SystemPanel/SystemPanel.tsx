@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import { ipc } from '@renderer/lib/ipc';
 import Panel from '../Panel';
-import type { SystemInfo } from '@root/common/ipc';
+import type { SystemInfo } from '@root/common/types';
 
 export default function SystemPanel(): React.JSX.Element {
   const [info, setInfo] = useState<SystemInfo | null>(null);

@@ -1,5 +1,5 @@
 import { arch, platform } from 'process';
-import type { SystemInfo } from '@root/common/ipc';
+import type { SystemInfo } from '@root/common/types';
 
 export class SystemService {
   getSystemInfo(): SystemInfo {

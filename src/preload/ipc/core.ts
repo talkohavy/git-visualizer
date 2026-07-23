@@ -1,18 +1,5 @@
 import { ipcRenderer } from 'electron';
-import type { InvokeSchema, SendSchema, EventSchema } from '@root/common/ipc';
-
-/**
- * ============================================================================
- *  PRELOAD IPC CORE - the renderer-facing half of the bridge.
- * ============================================================================
- *
- * These three generics are the *only* place the preload talks to `ipcRenderer`
- * directly. Everything else (the per-feature wrappers) is built on top of them,
- * so they get full type-safety for free and you never sprinkle raw channel
- * strings across the codebase.
- *
- * Written once - you should essentially never need to touch this file again.
- */
+import type { EventSchema, InvokeSchema, SendSchema } from '@root/main/ipc-service';
 
 /**
  * Request/response. Mirrors `ipcMain.handle` on the main side.

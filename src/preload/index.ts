@@ -1,5 +1,5 @@
 import { electronAPI } from '@electron-toolkit/preload';
-import { WorldKeys } from '@root/common/ipc';
+import { WorldKeys } from '@root/common/constants';
 import { contextBridge } from 'electron';
 import { api } from './api';
 

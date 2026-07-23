@@ -1,5 +1,5 @@
 import { ipcMain, BrowserWindow, type IpcMainEvent, type IpcMainInvokeEvent } from 'electron';
-import type { EventSchema, InvokeSchema, SendSchema } from '@root/common/ipc';
+import type { EventSchema, InvokeSchema, SendSchema } from './types';
 
 export class IpcBridgeService {
   /**

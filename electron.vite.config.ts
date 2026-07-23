@@ -16,6 +16,7 @@ export default defineConfig({
     resolve: {
       alias: {
         '@root': resolve(__dirname, 'src'),
+        '@main': resolve(__dirname, 'src/main'),
       },
     },
   },
@@ -31,6 +32,7 @@ export default defineConfig({
     resolve: {
       alias: {
         '@root': resolve(__dirname, 'src'),
+        '@preload': resolve(__dirname, 'src/preload'),
       },
     },
   },
@@ -41,8 +43,8 @@ export default defineConfig({
     root: 'src/renderer',
     resolve: {
       alias: {
-        '@renderer': resolve('src/renderer/src'),
         '@root': resolve(__dirname, 'src'),
+        '@renderer': resolve('src/renderer/src'),
       },
     },
     clearScreen: false,
