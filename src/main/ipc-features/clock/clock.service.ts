@@ -1,0 +1,30 @@
+import { TICK_INTERVAL_MS } from './logic/constants';
+import type { TickListener } from './types';
+
+export class ClockService {
+  private setIntervalId: NodeJS.Timeout | null = null;
+  private onTick: TickListener = () => {};
+
+  setTickListener(listener: TickListener): void {
+    this.onTick = listener;
+  }
+
+  setRunning(running: boolean): void {
+    if (running) this.start();
+    else this.stop();
+  }
+
+  private start(): void {
+    if (this.setIntervalId) return;
+
+    this.setIntervalId = setInterval(() => this.onTick(Date.now()), TICK_INTERVAL_MS);
+  }
+
+  private stop(): void {
+    if (!this.setIntervalId) return;
+
+    clearInterval(this.setIntervalId);
+
+    this.setIntervalId = null;
+  }
+}
