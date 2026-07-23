@@ -18,6 +18,11 @@ export default defineConfig(
   eslintConfigPrettier,
   {
     files: ['**/*.{ts,tsx,js,jsx,mjs,cjs}'],
+    settings: {
+      react: {
+        version: '19.2',
+      },
+    },
     plugins: {
       perfectionist,
       import: importPlugin,
