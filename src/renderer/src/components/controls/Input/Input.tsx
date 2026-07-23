@@ -62,7 +62,7 @@ export default function Input(props: InputProps) {
     if (value !== innerValue && value !== undefined) {
       setInnerValue(value);
     }
-  }, [value]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [value]);
 
   const onTargetValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { shouldChange, newValue } = dontChangeRule?.(e, e.target.value) ?? {

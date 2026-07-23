@@ -21,10 +21,10 @@ const config = {
       files: ['*.yaml'],
       options: {
         // This is required in order to NOT brake Helm template syntax
-        bracketSpacing: false
-      }
-    }
-  ]
-}
+        bracketSpacing: false,
+      },
+    },
+  ],
+};
 
-export default config
+export default config;

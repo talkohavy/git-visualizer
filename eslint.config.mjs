@@ -1,12 +1,12 @@
-import eslintConfigPrettier from '@electron-toolkit/eslint-config-prettier'
-import pluginJs from '@eslint/js'
-import importPlugin from 'eslint-plugin-import'
-import perfectionist from 'eslint-plugin-perfectionist'
-import eslintPluginReact from 'eslint-plugin-react'
-import eslintPluginReactRefresh from 'eslint-plugin-react-refresh'
-import { defineConfig } from 'eslint/config'
-import globals from 'globals'
-import tseslint from 'typescript-eslint'
+import eslintConfigPrettier from '@electron-toolkit/eslint-config-prettier';
+import pluginJs from '@eslint/js';
+import importPlugin from 'eslint-plugin-import';
+import perfectionist from 'eslint-plugin-perfectionist';
+import eslintPluginReact from 'eslint-plugin-react';
+import eslintPluginReactRefresh from 'eslint-plugin-react-refresh';
+import { defineConfig } from 'eslint/config';
+import globals from 'globals';
+import tseslint from 'typescript-eslint';
 
 export default defineConfig(
   { ignores: ['**/node_modules', '**/dist', '**/out'] },
@@ -21,11 +21,11 @@ export default defineConfig(
     plugins: {
       perfectionist,
       import: importPlugin,
-      'react-refresh': eslintPluginReactRefresh
+      'react-refresh': eslintPluginReactRefresh,
     },
     rules: {
-      ...eslintPluginReactRefresh.configs.vite.rules
-    }
+      ...eslintPluginReactRefresh.configs.vite.rules,
+    },
   },
   {
     rules: {
@@ -77,48 +77,36 @@ export default defineConfig(
             'type-external',
             'type-internal',
             ['type-parent', 'type-sibling', 'type-index'],
-            'unknown'
+            'unknown',
           ],
           customGroups: [
             {
               groupName: 'react',
               selector: 'type',
-              elementNamePattern: ['^react$', '^react-.+']
+              elementNamePattern: ['^react$', '^react-.+'],
             },
             {
               groupName: 'react',
-              elementNamePattern: ['^react$', '^react-.+']
-            }
+              elementNamePattern: ['^react$', '^react-.+'],
+            },
           ],
-          environment: 'node' // <--- Possible Options: 'node' | 'bun'
-        }
+          environment: 'node', // <--- Possible Options: 'node' | 'bun'
+        },
       ],
       'import/order': [
         'error',
         {
-          groups: [
-            [
-              'builtin',
-              'external',
-              'internal',
-              'unknown',
-              'parent',
-              'sibling',
-              'index',
-              'object',
-              'type'
-            ]
-          ],
+          groups: [['builtin', 'external', 'internal', 'unknown', 'parent', 'sibling', 'index', 'object', 'type']],
           'newlines-between': 'ignore',
           alphabetize: {
             order: 'ignore',
-            caseInsensitive: true
+            caseInsensitive: true,
           },
           named: {
             enabled: true,
-            types: 'types-last'
-          }
-        }
+            types: 'types-last',
+          },
+        },
       ],
       '@typescript-eslint/no-unused-vars': [
         'error',
@@ -130,8 +118,8 @@ export default defineConfig(
           caughtErrorsIgnorePattern: '^_',
           destructuredArrayIgnorePattern: '^_',
           ignoreRestSiblings: false,
-          varsIgnorePattern: '^React$'
-        }
+          varsIgnorePattern: '^React$',
+        },
       ],
 
       // Warning Rules
@@ -140,7 +128,7 @@ export default defineConfig(
       // Off Rules
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/ban-ts-comment': 'off',
-      'preserve-caught-error': 'off'
+      'preserve-caught-error': 'off',
 
       // 'sort-imports': [ <--- DO NOT ENABLE! Collides with perfectionist/sort-imports
       //   'error',
@@ -153,6 +141,6 @@ export default defineConfig(
       //   },
       // ],
       // 'sort-keys': ['error', 'asc', { caseSensitive: true, natural: false, minKeys: 2 }], <--- DO NOT ENABLE! Collides with perfectionist/sort-imports
-    }
-  }
-)
+    },
+  },
+);
