@@ -1,7 +1,7 @@
-import { registerClockIpc } from './clock/clock.ipc';
-import { registerCounterIpc } from './counter/counter.ipc';
-import { registerDialogIpc } from './dialog/dialog.ipc';
-import { registerSystemIpc } from './system/system.ipc';
+import { registerClockIpc } from './clock';
+import { registerCounterIpc } from './counter';
+import { registerDialogIpc } from './dialog';
+import { registerSystemIpc } from './system';
 import type { IpcBridgeService } from '../ipc-service/ipc-bridge.service';
 
 export function registerIpcFeatures(bridge: IpcBridgeService) {
