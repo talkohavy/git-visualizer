@@ -12,8 +12,8 @@ import {
   ScrollUpButton,
   Content,
 } from '@radix-ui/react-select';
+import { addDataAttributeWhen } from '@renderer/common/utils/addDataAttributeWhen';
 import clsx from 'clsx';
-import { addDataAttributeWhen } from '@src/common/utils/addDataAttributeWhen';
 import DownArrow from '../../svgs/DownArrow';
 import styles from './Select.module.scss';
 import SelectItem from './SelectItem';
