@@ -1,97 +1,18 @@
-import { orderBranches } from './laneOrder';
-import type { GitModel } from './types';
+import {
+  NODE_RADIUS,
+  PADDING,
+  ROW_HEIGHT,
+  LANE_WIDTH,
+  LABEL_RESERVE,
+  type LayoutResult,
+  type LayoutEdge,
+  type LayoutLabel,
+  type LayoutNode,
+} from './constants';
+import { orderBranches } from './utils/orderBranches';
+import type { GitModel } from '@root/common/types';
 
-/**
- * Node circle radius in px. Diameter (64px) satisfies the "at least 60px" goal.
- */
-export const NODE_RADIUS = 32;
-/**
- * Vertical distance between two successive commits. Kept large so arches are
- * long and side branches read as clearly separate from their parent.
- */
-export const ROW_HEIGHT = 140;
-/**
- * Horizontal distance between branch lanes. Generous so a side branch sits far
- * from the branch it was created from.
- */
-export const LANE_WIDTH = 210;
-/**
- * Outer padding around the whole graph.
- */
-export const PADDING = 90;
-/**
- * Extra room on the right for branch labels.
- */
-export const LABEL_RESERVE = 220;
-
-export type LayoutNode = {
-  hash: string;
-  prefix: string;
-  cx: number;
-  cy: number;
-  color: string;
-  branch: string;
-  isMerge: boolean;
-};
-
-export type LayoutEdge = {
-  id: string;
-  path: string;
-  color: string;
-};
-
-export type LayoutLabel = {
-  name: string;
-  x: number;
-  y: number;
-  color: string;
-  isHead: boolean;
-};
-
-export type LayoutResult = {
-  nodes: LayoutNode[];
-  edges: LayoutEdge[];
-  labels: LayoutLabel[];
-  width: number;
-  height: number;
-};
-
-function centerX(props: { lane: number }): number {
-  const { lane } = props;
-  const value = PADDING + NODE_RADIUS + lane * LANE_WIDTH;
-
-  return value;
-}
-
-function centerY(props: { order: number; maxOrder: number }): number {
-  const { order, maxOrder } = props;
-  const value = PADDING + NODE_RADIUS + (maxOrder - order) * ROW_HEIGHT;
-
-  return value;
-}
-
-/**
- * Builds a smooth S-shaped cubic Bezier from a parent (below) up to its child
- * (above). Control points sit at the vertical midpoint, so lane changes bow
- * outward with a pleasant, readable curvature.
- */
-function edgePath(props: { fromX: number; fromY: number; toX: number; toY: number }): string {
-  const { fromX, fromY, toX, toY } = props;
-  const midY = (fromY + toY) / 2;
-  const path = `M ${fromX} ${fromY} C ${fromX} ${midY}, ${toX} ${midY}, ${toX} ${toY}`;
-
-  return path;
-}
-
-/**
- * Pure transform: a `GitModel` becomes absolute coordinates, curved edge paths,
- * branch-label positions and the total canvas size. No React, no DOM.
- *
- * Lanes (the X axis) come from `orderBranches`, which nests short-lived branches
- * inside longer-lived ones to avoid arches crossing. Pass an explicit
- * `branchOrder` to override that ordering manually.
- */
-export function computeLayout(props: { model: GitModel; branchOrder?: string[] }): LayoutResult {
+export function computeLayout(props: { model: GitModel; branchOrder?: string[] }) {
   const { model, branchOrder } = props;
   const { commits, branches, head } = model;
 
@@ -187,4 +108,31 @@ export function computeLayout(props: { model: GitModel; branchOrder?: string[] }
   const result: LayoutResult = { nodes, edges, labels, width, height };
 
   return result;
+}
+
+function centerX(props: { lane: number }): number {
+  const { lane } = props;
+  const value = PADDING + NODE_RADIUS + lane * LANE_WIDTH;
+
+  return value;
+}
+
+function centerY(props: { order: number; maxOrder: number }): number {
+  const { order, maxOrder } = props;
+  const value = PADDING + NODE_RADIUS + (maxOrder - order) * ROW_HEIGHT;
+
+  return value;
+}
+
+/**
+ * Builds a smooth S-shaped cubic Bezier from a parent (below) up to its child
+ * (above). Control points sit at the vertical midpoint, so lane changes bow
+ * outward with a pleasant, readable curvature.
+ */
+function edgePath(props: { fromX: number; fromY: number; toX: number; toY: number }): string {
+  const { fromX, fromY, toX, toY } = props;
+  const midY = (fromY + toY) / 2;
+  const path = `M ${fromX} ${fromY} C ${fromX} ${midY}, ${toX} ${midY}, ${toX} ${toY}`;
+
+  return path;
 }

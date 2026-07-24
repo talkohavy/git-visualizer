@@ -1,33 +1,8 @@
-import { createHashGenerator } from './hash';
-import type { BranchInfo, Commit, GitModel } from './types';
+import { BRANCH_PALETTE, DEFAULT_BRANCH, DEFAULT_COLOR } from './constants';
+import { createHashGenerator } from './utils/createHashGenerator';
+import type { BranchInfo, Commit, GitModel } from '@root/common/types';
+import type { MutableBranch } from '../types';
 
-const BRANCH_PALETTE = [
-  '#3b82f6', // blue   (main)
-  '#22c55e', // green
-  '#f59e0b', // amber
-  '#ec4899', // pink
-  '#8b5cf6', // violet
-  '#14b8a6', // teal
-  '#ef4444', // red
-  '#eab308', // yellow
-];
-
-const DEFAULT_BRANCH = 'main';
-const DEFAULT_COLOR = '#3b82f6';
-
-type MutableBranch = {
-  name: string;
-  tip: string;
-  lane: number;
-  color: string;
-};
-
-/**
- * The "brain": a fluent, git-like builder that records commits, branches and
- * HEAD, then compiles everything into a plain `GitModel` DAG for the layout.
- *
- * Merge commits carry two parents, so the model is a DAG, not a plain tree.
- */
 export default class GitRepo {
   private readonly commits: Commit[] = [];
   private readonly branches = new Map<string, MutableBranch>();

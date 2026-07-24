@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { ipcClient } from '@renderer/lib/ipc';
 import GitGraph from '../content/GitGraph';
-import { EXAMPLES } from '../examples/examples';
-import { orderBranches } from '../logic/laneOrder';
+import { EXAMPLES, type Example } from '../examples/examples';
+import { orderBranches } from './utils/orderBranches';
 import type { SelectOption } from '@renderer/components/controls/Select';
-import type { GitModel } from '../logic/types';
+import type { BranchInfo, GitModel } from '@root/common/types';
 import type { Source } from '../types';
 
 export function useGitVisualizerPageLogic() {
@@ -24,8 +24,8 @@ export function useGitVisualizerPageLogic() {
     [],
   );
 
-  const selectedExample = useMemo(
-    () => EXAMPLES.find((example) => example.id === selectedId) ?? EXAMPLES[0],
+  const selectedExample = useMemo<Example>(
+    () => EXAMPLES.find((example) => example.id === selectedId) ?? EXAMPLES[0]!,
     [selectedId],
   );
 
@@ -42,7 +42,7 @@ export function useGitVisualizerPageLogic() {
   const colorByBranch = useMemo(() => {
     const map: Record<string, string> = {};
 
-    activeModel?.branches.forEach((branch) => {
+    activeModel?.branches.forEach((branch: BranchInfo) => {
       map[branch.name] = branch.color;
     });
 

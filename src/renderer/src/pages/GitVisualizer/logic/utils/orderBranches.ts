@@ -1,4 +1,4 @@
-import type { GitModel } from './types';
+import type { GitModel } from '@root/common/types';
 
 /**
  * Decides the left-to-right order of branch lanes so arches cross as little as
