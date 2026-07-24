@@ -5,6 +5,7 @@ import { useScrollToEdge } from '@renderer/hooks/useScrollToEdge';
 import { ipcClient } from '@renderer/lib/ipc';
 import GitGraph from '../content/GitGraph';
 import { EXAMPLES, type Example } from '../examples/examples';
+import { filterModelByBranches } from './utils/filterModelByBranches';
 import { orderBranches } from './utils/orderBranches';
 import type { SelectOption } from '@renderer/components/controls/Select';
 import type { BranchInfo, GitModel } from '@root/common/types';
@@ -14,6 +15,7 @@ export function useGitVisualizerPageLogic() {
   const [selectedId, setSelectedId] = useState(EXAMPLES[0]?.id ?? '');
   const [order, setOrder] = useState<string[]>([]);
   const [isCustom, setIsCustom] = useState(false);
+  const [selectedBranches, setSelectedBranches] = useState<string[]>([]);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const [scrollTop, setScrollTop] = useState(0);
@@ -111,13 +113,41 @@ export function useGitVisualizerPageLogic() {
     return map;
   }, [activeModel]);
 
-  // Reset the lane order whenever the active model changes: examples may carry a
-  // manual override; real repos always start from the automatic order.
   useEffect(() => {
     const override = showingRepo ? undefined : selectedExample?.branchOrder;
     setOrder(override ?? autoOrder);
     setIsCustom(Boolean(override));
   }, [activeModel, autoOrder, showingRepo, selectedExample]);
+
+  const branchOptions = useMemo(
+    () => (activeModel?.branches ?? []).map((branch) => ({ name: branch.name, color: branch.color })),
+    [activeModel],
+  );
+
+  useEffect(() => {
+    setSelectedBranches(activeModel ? activeModel.branches.map((branch) => branch.name) : []);
+  }, [activeModel]);
+
+  const selectedBranchSet = useMemo(() => new Set(selectedBranches), [selectedBranches]);
+
+  const filteredModel = useMemo(
+    () => (activeModel ? filterModelByBranches({ model: activeModel, selectedBranches }) : null),
+    [activeModel, selectedBranches],
+  );
+
+  const handleToggleBranch = useCallback((name: string) => {
+    setSelectedBranches((current) =>
+      current.includes(name) ? current.filter((branch) => branch !== name) : [...current, name],
+    );
+  }, []);
+
+  const handleSelectAllBranches = useCallback(() => {
+    setSelectedBranches(branchOptions.map((branch) => branch.name));
+  }, [branchOptions]);
+
+  const handleClearBranches = useCallback(() => {
+    setSelectedBranches([]);
+  }, []);
 
   function handleSelect(option: SelectOption) {
     setSelectedId(option.value.toString());
@@ -207,9 +237,29 @@ export function useGitVisualizerPageLogic() {
         </button>
       </div>
     );
-  } else if (activeModel) {
+  } else if (activeModel && selectedBranches.length === 0) {
     graphArea = (
-      <GitGraph model={activeModel} branchOrder={order} scrollTop={scrollTop} viewportHeight={viewportHeight} />
+      <div className='mx-auto max-w-md rounded-xl border border-gray-300 bg-white p-6 text-center dark:border-gray-700 dark:bg-gray-900'>
+        <p className='text-sm font-medium text-gray-700 dark:text-gray-200'>No branches selected</p>
+
+        <button
+          type='button'
+          onClick={handleSelectAllBranches}
+          className='mt-4 rounded-lg border border-gray-300 px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-800'
+        >
+          Show all branches
+        </button>
+      </div>
+    );
+  } else if (filteredModel) {
+    graphArea = (
+      <GitGraph
+        model={filteredModel}
+        branchOrder={order}
+        labelBranches={selectedBranchSet}
+        scrollTop={scrollTop}
+        viewportHeight={viewportHeight}
+      />
     );
   }
 
@@ -229,6 +279,11 @@ export function useGitVisualizerPageLogic() {
     order,
     colorByBranch,
     isCustom,
+    branchOptions,
+    selectedBranches,
+    handleToggleBranch,
+    handleSelectAllBranches,
+    handleClearBranches,
     scrollRef,
     isDragging,
     dragHandlers,

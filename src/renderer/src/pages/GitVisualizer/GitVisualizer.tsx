@@ -1,6 +1,7 @@
 import Select from '@renderer/components/controls/Select';
 import DownArrow from '@renderer/components/svgs/DownArrow';
 import clsx from 'clsx';
+import BranchFilter from './content/BranchFilter';
 import BranchOrderControls from './content/BranchOrderControls';
 import { useGitVisualizerPageLogic } from './logic/useGitVisualizerPageLogic';
 
@@ -23,6 +24,11 @@ export default function GitVisualizerPage() {
     order,
     colorByBranch,
     isCustom,
+    branchOptions,
+    selectedBranches,
+    handleToggleBranch,
+    handleSelectAllBranches,
+    handleClearBranches,
     scrollRef,
     isDragging,
     dragHandlers,
@@ -86,7 +92,15 @@ export default function GitVisualizerPage() {
         </div>
       </header>
 
-      <div className='border-b border-gray-200 dark:border-gray-800 px-8 py-4'>
+      <div className='flex flex-wrap items-center gap-6 border-b border-gray-200 dark:border-gray-800 px-8 py-4'>
+        <BranchFilter
+          branches={branchOptions}
+          selected={selectedBranches}
+          onToggle={handleToggleBranch}
+          onSelectAll={handleSelectAllBranches}
+          onClear={handleClearBranches}
+        />
+
         {showLaneControls ? (
           <BranchOrderControls
             order={order}

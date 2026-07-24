@@ -11,6 +11,10 @@ type GitGraphProps = {
   branchOrder?: string[];
   onCommitClick?: (hash: string) => void;
   /**
+   * When set, only branches in this set get a label pill (others stay unlabeled).
+   */
+  labelBranches?: Set<string>;
+  /**
    * Vertical scroll offset of the surrounding scroll container, in displayed px.
    */
   scrollTop?: number;
@@ -25,7 +29,7 @@ type GitGraphProps = {
 const SCALE = 0.6;
 
 export default function GitGraph(props: GitGraphProps) {
-  const { model, branchOrder, onCommitClick, scrollTop = 0, viewportHeight = 0 } = props;
+  const { model, branchOrder, onCommitClick, labelBranches, scrollTop = 0, viewportHeight = 0 } = props;
 
   const svgRef = useRef<SVGSVGElement>(null);
   const [svgOffsetTop, setSvgOffsetTop] = useState(0);
@@ -45,11 +49,13 @@ export default function GitGraph(props: GitGraphProps) {
 
   const visible = useMemo(() => {
     const nodes = layout.nodes.filter((node) => node.cy >= windowTop && node.cy <= windowBottom);
-    const labels = layout.labels.filter((label) => label.y >= windowTop && label.y <= windowBottom);
+    const labels = layout.labels.filter(
+      (label) => label.y >= windowTop && label.y <= windowBottom && (!labelBranches || labelBranches.has(label.name)),
+    );
     const edges = layout.edges.filter((edge) => edge.maxY >= windowTop && edge.minY <= windowBottom);
 
     return { nodes, labels, edges };
-  }, [layout, windowTop, windowBottom]);
+  }, [layout, windowTop, windowBottom, labelBranches]);
 
   return (
     <svg
