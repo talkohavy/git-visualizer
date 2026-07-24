@@ -9,7 +9,7 @@
     "clean": "rm -rf node_modules",
     "dev": "electron-vite dev",
     "build": "npm run typecheck && electron-vite build",
-    "lint": "eslint --cache .",
+    "lint": "eslint .",
     "format": "biome format ./src",
     "format:fix": "biome format --verbose ./src --write",
     "format:prettier": "prettier . --check --config .prettierrc.mjs --ignore-path .prettierignore",
