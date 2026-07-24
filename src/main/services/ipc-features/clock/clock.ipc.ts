@@ -1,6 +1,6 @@
 import { ApiEvents } from '@root/common/constants';
 import { ClockService } from './clock.service';
-import type { IpcBridgeService } from '../../ipc-service';
+import type { IpcBridgeService } from '../../ipc-bridge';
 
 export function registerClockIpc(bridge: IpcBridgeService): void {
   const clockService = new ClockService();

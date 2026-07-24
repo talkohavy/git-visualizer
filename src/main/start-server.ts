@@ -1,9 +1,9 @@
 import { electronApp, optimizer } from '@electron-toolkit/utils';
 import { ElectronEvents } from '@root/common/constants';
 import { app, BrowserWindow } from 'electron';
-import { registerIpcFeatures } from './ipc-features';
-import { IpcBridgeService } from './ipc-service/ipc-bridge.service';
-import { createWindow } from './windows/createWindow';
+import { createWindow } from './services/create-window';
+import { IpcBridgeService } from './services/ipc-bridge';
+import { registerIpcFeatures } from './services/ipc-features';
 
 startApp();
 
@@ -24,9 +24,14 @@ function handleAppIsReady(): void {
   // F12 toggles DevTools in dev; ignore Cmd/Ctrl+R in production.
   app.on(ElectronEvents.BrowserWindowCreated, (_, window) => {
     optimizer.watchWindowShortcuts(window, {
-      zoom: true,
-      escToCloseWindow: true,
+      zoom: true, // <--- support cmd+/- to zoom in and out. Defaults to false.
+      escToCloseWindow: true, // <--- support esc to close window. Defaults to false.
     });
+  });
+
+  // On macOS, re-create a window when the dock icon is clicked with none open.
+  app.on(ElectronEvents.Activate, () => {
+    if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
 
   const ipcBridgeService = new IpcBridgeService();
@@ -34,9 +39,4 @@ function handleAppIsReady(): void {
   registerIpcFeatures(ipcBridgeService);
 
   createWindow();
-
-  // On macOS, re-create a window when the dock icon is clicked with none open.
-  app.on(ElectronEvents.Activate, () => {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow();
-  });
 }

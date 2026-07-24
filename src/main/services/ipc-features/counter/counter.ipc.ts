@@ -1,6 +1,6 @@
 import { ApiEvents } from '@root/common/constants';
 import { CounterService } from './counter.service';
-import type { IpcBridgeService } from '../../ipc-service';
+import type { IpcBridgeService } from '../../ipc-bridge';
 
 export function registerCounterIpc(bridge: IpcBridgeService): void {
   const counterService = new CounterService();

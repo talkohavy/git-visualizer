@@ -6,5 +6,5 @@ import { ipcService } from '../ipc-service';
  * `selectFolder` resolves to the chosen absolute path, or `null` if cancelled.
  */
 export const dialog = {
-  selectFolder: () => ipcService.invoke(ApiEvents.DialogSelectFolder),
+  selectFolder: () => ipcService.invoke<string | null>(ApiEvents.DialogSelectFolder),
 };

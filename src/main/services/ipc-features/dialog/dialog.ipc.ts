@@ -1,6 +1,6 @@
 import { ApiEvents } from '@root/common/constants';
 import { BrowserWindow, dialog, type OpenDialogOptions } from 'electron';
-import type { IpcBridgeService } from '../../ipc-service';
+import type { IpcBridgeService } from '../../ipc-bridge';
 
 export function registerDialogIpc(bridge: IpcBridgeService): void {
   bridge.handle(ApiEvents.DialogSelectFolder, async (event) => {

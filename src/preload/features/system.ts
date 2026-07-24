@@ -6,5 +6,5 @@ import { ipcService } from '../ipc-service';
  * A pure request/response feature: one `invoke`, nothing else.
  */
 export const system = {
-  getInfo: () => ipcService.invoke(ApiEvents.SystemGetInfo),
+  getInfo: () => ipcService.invoke<number>(ApiEvents.SystemGetInfo),
 };

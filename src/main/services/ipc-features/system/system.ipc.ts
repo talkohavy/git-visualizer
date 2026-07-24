@@ -1,6 +1,6 @@
-import { ApiEvents } from '../../../common/constants';
+import { ApiEvents } from '../../../../common/constants';
 import { SystemService } from './system.service';
-import type { IpcBridgeService } from '../../ipc-service/ipc-bridge.service';
+import type { IpcBridgeService } from '../../ipc-bridge/ipc-bridge.service';
 
 /**
  * IPC = thin adapter. Maps schema channels to service calls. No logic here.
