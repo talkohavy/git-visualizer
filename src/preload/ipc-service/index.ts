@@ -1,1 +1,1 @@
-export { ipcService } from './ipc.service';
+export { IpcService } from './ipc.service';

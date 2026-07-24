@@ -1,6 +1,6 @@
 import { ipcRenderer } from 'electron';
 
-class IpcService {
+export class IpcService {
   /**
    * Request/response. Mirrors `ipcMain.handle` on the main side.
    *
@@ -38,5 +38,3 @@ class IpcService {
     };
   }
 }
-
-export const ipcService = new IpcService();

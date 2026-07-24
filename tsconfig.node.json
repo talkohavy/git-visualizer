@@ -39,7 +39,8 @@
       "/*": ["./src/public/*"],
       "@root/*": ["./src/*"],
       "@main/*": ["./src/main/*"],
-      "@renderer/*": ["./src/renderer/src/*"]
+      "@renderer/*": ["./src/renderer/src/*"],
+      "@preload/*": ["./src/preload/*"]
     },
     // "rootDirs": [],                                   /* Allow multiple folders to be treated as one when resolving modules. */
     // "types": ["electron-vite/node"],                  /* Specify type package names to be included without being referenced in a source file. */
