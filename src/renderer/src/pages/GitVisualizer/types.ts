@@ -21,6 +21,14 @@ export type LayoutEdge = {
   id: string;
   path: string;
   color: string;
+  /**
+   * Topmost logical Y of the edge's vertical span (used for viewport culling).
+   */
+  minY: number;
+  /**
+   * Bottommost logical Y of the edge's vertical span (used for viewport culling).
+   */
+  maxY: number;
 };
 
 export type LayoutLabel = {

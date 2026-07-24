@@ -46,3 +46,5 @@ export const PILL_HEIGHT = 34;
  * Horizontal gap between branch labels that share the same commit tip.
  */
 export const LABEL_GAP = 8;
+
+export const OVERSCAN = ROW_HEIGHT * 8;

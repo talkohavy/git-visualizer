@@ -31,6 +31,7 @@ export default function GitVisualizerPage() {
     isCloseToTop,
     onScrollToBottom,
     onScrollToTop,
+    onScrollMetrics,
     scrollToBottom,
     scrollToTop,
   } = useGitVisualizerPageLogic();
@@ -102,6 +103,7 @@ export default function GitVisualizerPage() {
         onScroll={(e) => {
           onScrollToBottom(e);
           onScrollToTop(e);
+          onScrollMetrics();
         }}
         {...dragHandlers}
         className={clsx(

@@ -80,7 +80,10 @@ export function computeLayout(props: { model: GitModel; branchOrder?: string[] }
         toY: childPosition.cy,
       });
 
-      edges.push({ id: `${parentHash}-${commit.hash}`, path, color });
+      const minY = Math.min(parentPosition.cy, childPosition.cy);
+      const maxY = Math.max(parentPosition.cy, childPosition.cy);
+
+      edges.push({ id: `${parentHash}-${commit.hash}`, path, color, minY, maxY });
     });
   });
 

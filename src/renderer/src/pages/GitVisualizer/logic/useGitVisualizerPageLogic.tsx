@@ -16,6 +16,54 @@ export function useGitVisualizerPageLogic() {
   const [isCustom, setIsCustom] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
+  const [scrollTop, setScrollTop] = useState(0);
+  const [viewportHeight, setViewportHeight] = useState(0);
+  const rafRef = useRef<number | null>(null);
+
+  const readScrollMetrics = useCallback(() => {
+    const element = scrollRef.current;
+
+    if (!element) {
+      return;
+    }
+
+    setScrollTop(element.scrollTop);
+    setViewportHeight(element.clientHeight);
+  }, []);
+
+  const onScrollMetrics = useCallback(() => {
+    if (rafRef.current !== null) {
+      return;
+    }
+
+    rafRef.current = requestAnimationFrame(() => {
+      rafRef.current = null;
+      readScrollMetrics();
+    });
+  }, [readScrollMetrics]);
+
+  useEffect(() => {
+    const element = scrollRef.current;
+
+    if (!element) {
+      return;
+    }
+
+    readScrollMetrics();
+
+    const observer = new ResizeObserver(() => readScrollMetrics());
+    observer.observe(element);
+
+    return () => {
+      observer.disconnect();
+
+      if (rafRef.current !== null) {
+        cancelAnimationFrame(rafRef.current);
+        rafRef.current = null;
+      }
+    };
+  }, [readScrollMetrics]);
+
   const { isCloseToEdge: isCloseToBottom, onScroll: onScrollToBottom } = useIsCloseToEdge({ to: 'bottom' });
   const { scrollToEdge: scrollToBottom } = useScrollToEdge({ refElement: scrollRef, to: 'bottom' });
 
@@ -160,7 +208,9 @@ export function useGitVisualizerPageLogic() {
       </div>
     );
   } else if (activeModel) {
-    graphArea = <GitGraph model={activeModel} branchOrder={order} />;
+    graphArea = (
+      <GitGraph model={activeModel} branchOrder={order} scrollTop={scrollTop} viewportHeight={viewportHeight} />
+    );
   }
 
   return {
@@ -187,6 +237,7 @@ export function useGitVisualizerPageLogic() {
     isCloseToTop,
     onScrollToBottom,
     onScrollToTop,
+    onScrollMetrics,
     scrollToBottom,
     scrollToTop,
   };
