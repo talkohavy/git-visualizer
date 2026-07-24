@@ -57,16 +57,6 @@ export function useGitVisualizerPageLogic() {
     setIsCustom(Boolean(override));
   }, [activeModel, autoOrder, showingRepo, selectedExample]);
 
-  // The tree grows upward, so scroll to the bottom (the root commit) whenever
-  // the model changes, letting the user read from bottom to top.
-  useEffect(() => {
-    const container = scrollRef.current;
-
-    if (container) {
-      container.scrollTop = container.scrollHeight;
-    }
-  }, [activeModel]);
-
   function handleSelect(option: SelectOption) {
     setSelectedId(option.value.toString());
     setSource('examples');
