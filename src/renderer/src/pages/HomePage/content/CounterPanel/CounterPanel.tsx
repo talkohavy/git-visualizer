@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useIpcEvent } from '@renderer/hooks/useIpcEvent';
-import { ipcClient } from '@root/renderer/src/lib/ipc';
+import { ipcClient } from '@renderer/lib/ipc';
 import Panel from '../Panel';
 
 export default function CounterPanel(): React.JSX.Element {

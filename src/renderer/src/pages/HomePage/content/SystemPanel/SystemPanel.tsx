@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { ipcClient } from '@root/renderer/src/lib/ipc';
+import { ipcClient } from '@renderer/lib/ipc';
 import Panel from '../Panel';
 import type { SystemInfo } from '@root/common/types';
 
