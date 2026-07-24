@@ -13,6 +13,9 @@ export const ApiEvents = {
   // Clock
   ClockSetRunning: 'clock:setRunning',
   ClockTick: 'clock:tick',
+
+  // Git
+  GitGetGraph: 'git:getGraph',
 } as const;
 
 export type ApiEventValues = (typeof ApiEvents)[keyof typeof ApiEvents];

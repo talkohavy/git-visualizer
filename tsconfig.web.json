@@ -3,7 +3,8 @@
   "compilerOptions": {
     "paths": {
       "@root/*": ["./src/*"],
-      "@renderer/*": ["./src/renderer/src/*"]
+      "@renderer/*": ["./src/renderer/src/*"],
+      "@preload/*": ["./src/preload/*"]
     },
 
     // -------------------
