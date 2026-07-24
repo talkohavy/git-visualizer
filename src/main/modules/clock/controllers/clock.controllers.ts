@@ -9,10 +9,12 @@ export class ClockController {
   ) {}
 
   register(): void {
-    this.clockService.setTickListener((timestampMs) => {
-      this.bridge.broadcast(ApiEvents.ClockTick, timestampMs);
-    });
+    this.startRunningClock();
+  }
 
-    this.bridge.on(ApiEvents.ClockSetRunning, (_event, running) => this.clockService.setRunning(running));
+  private startRunningClock() {
+    this.bridge.on(ApiEvents.ClockSetRunning, (_event, running) => {
+      this.clockService.setRunning(running);
+    });
   }
 }

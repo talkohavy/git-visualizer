@@ -3,11 +3,8 @@ import type { TickListener } from '../types';
 
 export class ClockService {
   private setIntervalId: NodeJS.Timeout | null = null;
-  private onTick: TickListener = () => {};
 
-  setTickListener(listener: TickListener): void {
-    this.onTick = listener;
-  }
+  constructor(private readonly onTick: TickListener) {}
 
   setRunning(running: boolean): void {
     if (running) return void this.start();
@@ -18,7 +15,9 @@ export class ClockService {
   private start(): void {
     if (this.setIntervalId) return;
 
-    this.setIntervalId = setInterval(() => this.onTick(Date.now()), TICK_INTERVAL_MS);
+    this.setIntervalId = setInterval(() => {
+      this.onTick(Date.now());
+    }, TICK_INTERVAL_MS);
   }
 
   private stop(): void {
