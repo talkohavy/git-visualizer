@@ -1,5 +1,4 @@
 import { ipcRenderer } from 'electron';
-import type { EventSchema, InvokeSchema, SendSchema } from '@root/main/ipc-service';
 
 class IpcService {
   /**
@@ -7,10 +6,7 @@ class IpcService {
    *
    * @example const info = await ipc.invoke(ApiEvents.SystemGetInfo)
    */
-  invoke<C extends keyof InvokeSchema>(
-    channel: C,
-    ...args: InvokeSchema[C]['args']
-  ): Promise<InvokeSchema[C]['result']> {
+  invoke<T = any>(channel: string, ...args: any): Promise<T> {
     return ipcRenderer.invoke(channel, ...args);
   }
 
@@ -19,7 +15,7 @@ class IpcService {
    *
    * @example ipc.send(ApiEvents.CounterIncrement, 5)
    */
-  send<C extends keyof SendSchema>(channel: C, ...args: SendSchema[C]['args']): void {
+  send(channel: string, ...args: any): void {
     ipcRenderer.send(channel, ...args);
   }
 
@@ -32,8 +28,8 @@ class IpcService {
    *
    * @example const off = ipc.subscribe(ApiEvents.ClockTick, (ts) => setNow(ts)); // later: off()
    */
-  subscribe<C extends keyof EventSchema>(channel: C, listener: (payload: EventSchema[C]) => void): () => void {
-    const handler = (_event: Electron.IpcRendererEvent, payload: EventSchema[C]): void => listener(payload);
+  subscribe(channel: string, listener: (payload: any) => void): () => void {
+    const handler = (_event: Electron.IpcRendererEvent, payload: any): void => listener(payload);
 
     ipcRenderer.on(channel, handler);
 
