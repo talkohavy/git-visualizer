@@ -12,10 +12,10 @@ import { useEffect, useRef } from 'react';
  * even if the callback identity changes between renders.
  *
  * @example
- *   useIpcEvent(ipc.clock.onTick, (ts) => setNow(ts))
- *   useIpcEvent(ipc.counter.onChanged, setCount)
+ *   useIpcIncomingEvent(ipc.clock.onTick, (ts) => setNow(ts))
+ *   useIpcIncomingEvent(ipc.counter.onChanged, setCount)
  */
-export function useIpcEvent<T>(
+export function useIpcIncomingEvent<T>(
   subscribe: (listener: (payload: T) => void) => () => void,
   listener: (payload: T) => void,
 ): void {
