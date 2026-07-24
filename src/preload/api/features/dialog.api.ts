@@ -8,7 +8,5 @@ export class DialogApi {
     this.#ipc = ipc;
   }
 
-  selectFolder(): Promise<string | null> {
-    return this.#ipc.invoke<string | null>(ApiEvents.DialogSelectFolder);
-  }
+  selectFolder = (): Promise<string | null> => this.#ipc.invoke<string | null>(ApiEvents.DialogSelectFolder);
 }

@@ -8,11 +8,8 @@ export class ClockApi {
     this.#ipc = ipc;
   }
 
-  setRunning(running: boolean): void {
-    this.#ipc.send(ApiEvents.ClockSetRunning, running);
-  }
+  setRunning = (running: boolean): void => this.#ipc.send(ApiEvents.ClockSetRunning, running);
 
-  onTick(listener: (timestampMs: number) => void): () => void {
-    return this.#ipc.subscribe(ApiEvents.ClockTick, listener);
-  }
+  onTick = (listener: (timestampMs: number) => void): (() => void) =>
+    this.#ipc.subscribe(ApiEvents.ClockTick, listener);
 }

@@ -9,7 +9,5 @@ export class SystemApi {
     this.#ipc = ipc;
   }
 
-  getInfo(): Promise<SystemInfo | null> {
-    return this.#ipc.invoke<SystemInfo | null>(ApiEvents.SystemGetInfo);
-  }
+  getInfo = (): Promise<SystemInfo | null> => this.#ipc.invoke<SystemInfo | null>(ApiEvents.SystemGetInfo);
 }

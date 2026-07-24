@@ -8,15 +8,10 @@ export class CounterApi {
     this.#ipc = ipc;
   }
 
-  get(): Promise<number> {
-    return this.#ipc.invoke<number>(ApiEvents.CounterGet);
-  }
+  get = (): Promise<number> => this.#ipc.invoke<number>(ApiEvents.CounterGet);
 
-  increment(by = 1): void {
-    this.#ipc.send(ApiEvents.CounterIncrement, by);
-  }
+  increment = (by = 1): void => this.#ipc.send(ApiEvents.CounterIncrement, by);
 
-  onChanged(listener: (value: number) => void): () => void {
-    return this.#ipc.subscribe(ApiEvents.CounterChanged, listener);
-  }
+  onChanged = (listener: (value: number) => void): (() => void) =>
+    this.#ipc.subscribe(ApiEvents.CounterChanged, listener);
 }
