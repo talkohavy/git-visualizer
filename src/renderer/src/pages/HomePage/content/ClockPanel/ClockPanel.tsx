@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { useIpcEvent } from '@renderer/hooks/useIpcEvent';
-import { ipc } from '@renderer/lib/ipc';
+import { ipcClient } from '@root/renderer/src/lib/ipc';
 import Panel from '../Panel';
 
 export default function ClockPanel(): React.JSX.Element {
   const [running, setRunning] = useState(false);
   const [lastTick, setLastTick] = useState<number | null>(null);
 
-  useIpcEvent(ipc.clock.onTick, (val: any) => {
+  useIpcEvent(ipcClient.clock.onTick, (val: any) => {
     setLastTick(val);
   });
 
@@ -16,7 +16,7 @@ export default function ClockPanel(): React.JSX.Element {
 
     setRunning(next);
 
-    ipc.clock.setRunning(next);
+    ipcClient.clock.setRunning(next);
   };
 
   const formattedLastTick = lastTick ? new Date(lastTick).toLocaleTimeString() : '(no ticks yet)';

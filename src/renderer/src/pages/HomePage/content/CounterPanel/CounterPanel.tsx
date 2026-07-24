@@ -1,23 +1,23 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useIpcEvent } from '@renderer/hooks/useIpcEvent';
-import { ipc } from '@renderer/lib/ipc';
+import { ipcClient } from '@root/renderer/src/lib/ipc';
 import Panel from '../Panel';
 
 export default function CounterPanel(): React.JSX.Element {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
-    ipc.counter.get().then(setCount);
+    ipcClient.counter.get().then(setCount);
   }, []);
 
-  useIpcEvent(ipc.counter.onChanged, setCount);
+  useIpcEvent(ipcClient.counter.onChanged, setCount);
 
   const onIncrementBy1Click = useCallback(() => {
-    ipc.counter.increment(1);
+    ipcClient.counter.increment(1);
   }, []);
 
   const onIncrementBy5Click = useCallback(() => {
-    ipc.counter.increment(5);
+    ipcClient.counter.increment(5);
   }, []);
 
   return (

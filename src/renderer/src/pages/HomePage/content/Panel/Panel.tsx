@@ -1,9 +1,7 @@
 import type { PropsWithChildren } from 'react';
 
 type PanelProps = PropsWithChildren<{
-  /** Monospaced title, e.g. the IPC call being demonstrated. */
   title: string;
-  /** Short label describing which IPC pattern this panel exercises. */
   pattern: string;
 }>;
 

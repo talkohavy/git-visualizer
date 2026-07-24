@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { ipc } from '@renderer/lib/ipc';
+import { ipcClient } from '@root/renderer/src/lib/ipc';
 import Panel from '../Panel';
 import type { SystemInfo } from '@root/common/types';
 
@@ -7,7 +7,7 @@ export default function SystemPanel(): React.JSX.Element {
   const [info, setInfo] = useState<SystemInfo | null>(null);
 
   const onLoadSystemInfoClick = useCallback(async () => {
-    const info = await ipc.system.getInfo();
+    const info = await ipcClient.system.getInfo();
 
     setInfo(info);
   }, []);

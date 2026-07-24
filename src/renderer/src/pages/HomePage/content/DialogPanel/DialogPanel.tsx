@@ -1,12 +1,12 @@
 import { useCallback, useState } from 'react';
-import { ipc } from '@renderer/lib/ipc';
+import { ipcClient } from '@root/renderer/src/lib/ipc';
 import Panel from '../Panel';
 
 export default function DialogPanel(): React.JSX.Element {
   const [folder, setFolder] = useState<string | null>(null);
 
   const onPickFolderClick = useCallback(async () => {
-    const folder = await ipc.dialog.selectFolder();
+    const folder = await ipcClient.dialog.selectFolder();
 
     setFolder(folder);
   }, []);

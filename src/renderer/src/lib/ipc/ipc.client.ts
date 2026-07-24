@@ -6,4 +6,4 @@
  * The type comes from `preload/api.ts` (via the `Window` augmentation in
  * `preload/index.d.ts`), so this is fully typed with zero duplication.
  */
-export const ipc = window.api;
+export const ipcClient = window.api;
