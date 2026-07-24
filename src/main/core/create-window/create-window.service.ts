@@ -28,6 +28,9 @@ export function createWindow(): BrowserWindow {
 
   window.on(WindowEvents.ReadyToShow, () => {
     window.show();
+    // window.title = 'Git Visualizer'; // <--- stronger than <title> in index.html
+    // window.setTitle('Git Visualizer456'); // <--- another way to do the same thing.
+    // window.setRepresentedFilename('file.mp4'); // <--- display an icon in the title bar, based on the file's extension.
   });
 
   // Open external links in the user's browser, not inside the app window.
