@@ -8,7 +8,6 @@ export default function ClockPanel(): React.JSX.Element {
   const [lastTick, setLastTick] = useState<number | null>(null);
 
   useIpcEvent(ipc.clock.onTick, (val: any) => {
-    console.log('val is:', val);
     setLastTick(val);
   });
 
