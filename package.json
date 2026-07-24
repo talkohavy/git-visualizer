@@ -1,6 +1,7 @@
 {
   "name": "git-visualizer",
   "version": "1.0.0",
+  "productName": "Git Visualizer",
   "description": "A desktop app that visualizes a local git repository's commit history as an interactive branch graph.",
   "main": "./out/main/index.js",
   "author": "example.com",
