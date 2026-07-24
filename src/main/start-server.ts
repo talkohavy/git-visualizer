@@ -1,9 +1,12 @@
 import { electronApp, optimizer } from '@electron-toolkit/utils';
 import { ElectronEvents } from '@root/common/constants';
 import { app, BrowserWindow } from 'electron';
-import { createWindow } from './services/create-window';
-import { IpcBridgeService } from './services/ipc-bridge';
-import { registerIpcFeatures } from './services/ipc-features';
+import { createWindow } from './core/create-window';
+import { IpcBridgeService } from './core/ipc-bridge';
+import { initClockModule } from './modules/clock';
+import { initCounterModule } from './modules/counter';
+import { initDialogModule } from './modules/dialog';
+import { initSystemModule } from './modules/system';
 
 startApp();
 
@@ -36,7 +39,10 @@ function handleAppIsReady(): void {
 
   const ipcBridgeService = new IpcBridgeService();
 
-  registerIpcFeatures(ipcBridgeService);
+  initClockModule(ipcBridgeService);
+  initCounterModule(ipcBridgeService);
+  initDialogModule(ipcBridgeService);
+  initSystemModule(ipcBridgeService);
 
   createWindow();
 }

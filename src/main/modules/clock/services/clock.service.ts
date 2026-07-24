@@ -1,5 +1,5 @@
-import { TICK_INTERVAL_MS } from './logic/constants';
-import type { TickListener } from './types';
+import { TICK_INTERVAL_MS } from '../logic/constants';
+import type { TickListener } from '../types';
 
 export class ClockService {
   private setIntervalId: NodeJS.Timeout | null = null;
@@ -10,8 +10,9 @@ export class ClockService {
   }
 
   setRunning(running: boolean): void {
-    if (running) this.start();
-    else this.stop();
+    if (running) return void this.start();
+
+    this.stop();
   }
 
   private start(): void {

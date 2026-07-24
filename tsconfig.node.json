@@ -39,6 +39,7 @@
     "paths": {
       "/*": ["./src/public/*"],
       "@root/*": ["./src/*"],
+      "@main/*": ["./src/main/*"],
       "@renderer/*": ["./src/renderer/src/*"]
     },
     // "rootDirs": [],                                   /* Allow multiple folders to be treated as one when resolving modules. */
