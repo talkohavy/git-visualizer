@@ -3,11 +3,8 @@ import { ElectronEvents } from '@root/common/constants';
 import { app, BrowserWindow } from 'electron';
 import { createWindow } from './core/create-window';
 import { IpcBridgeService } from './core/ipc-bridge';
-import { initClockModule } from './modules/clock';
-import { initCounterModule } from './modules/counter';
 import { initDialogModule } from './modules/dialog';
 import { initGitModule } from './modules/git';
-import { initSystemModule } from './modules/system';
 
 startApp();
 
@@ -40,11 +37,8 @@ function handleAppIsReady(): void {
 
   const ipcBridgeService = new IpcBridgeService();
 
-  initGitModule(ipcBridgeService);
-  initClockModule(ipcBridgeService);
-  initCounterModule(ipcBridgeService);
   initDialogModule(ipcBridgeService);
-  initSystemModule(ipcBridgeService);
+  initGitModule(ipcBridgeService);
 
   createWindow();
 }
