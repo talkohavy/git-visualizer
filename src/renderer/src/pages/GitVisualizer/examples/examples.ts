@@ -1,5 +1,5 @@
 import GitRepo from '../logic/GitRepo';
-import type { GitModel } from '../logic/types';
+import type { GitModel } from '@root/common/types';
 
 export type Example = {
   id: string;

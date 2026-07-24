@@ -1,4 +1,5 @@
-import { NODE_RADIUS, type LayoutNode } from '../../logic/layout';
+import { NODE_RADIUS } from '../../logic/constants';
+import type { LayoutNode } from '../../types';
 
 type CommitNodeProps = {
   node: LayoutNode;

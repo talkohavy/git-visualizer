@@ -39,34 +39,6 @@ export const PADDING = 90;
  */
 export const LABEL_RESERVE = 220;
 
-export type LayoutNode = {
-  hash: string;
-  prefix: string;
-  cx: number;
-  cy: number;
-  color: string;
-  branch: string;
-  isMerge: boolean;
-};
-
-export type LayoutEdge = {
-  id: string;
-  path: string;
-  color: string;
-};
-
-export type LayoutLabel = {
-  name: string;
-  x: number;
-  y: number;
-  color: string;
-  isHead: boolean;
-};
-
-export type LayoutResult = {
-  nodes: LayoutNode[];
-  edges: LayoutEdge[];
-  labels: LayoutLabel[];
-  width: number;
-  height: number;
-};
+export const CHAR_WIDTH = 9;
+export const HORIZONTAL_PADDING = 14;
+export const PILL_HEIGHT = 34;

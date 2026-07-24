@@ -2,6 +2,8 @@ import Select from '@renderer/components/controls/Select';
 import BranchOrderControls from './content/BranchOrderControls';
 import { useGitVisualizerPageLogic } from './logic/useGitVisualizerPageLogic';
 
+const showLaneControls = false;
+
 export default function GitVisualizerPage() {
   const {
     headerDescription,
@@ -30,8 +32,10 @@ export default function GitVisualizerPage() {
           <h1 className='text-2xl font-bold text-gray-800 dark:text-gray-100'>Git Visualizer</h1>
           <p className='text-sm text-gray-500 dark:text-gray-400 truncate max-w-2xl'>{headerDescription}</p>
         </div>
+
         <div className='flex items-center gap-3'>
           <span className='text-sm font-medium text-gray-600 dark:text-gray-300'>Example</span>
+
           <Select
             selectedOption={selectedOption}
             setSelectedOption={handleSelect}
@@ -39,6 +43,7 @@ export default function GitVisualizerPage() {
             ariaLabel='Choose a git example'
             className='min-w-56'
           />
+
           <button
             type='button'
             onClick={handleOpenRepo}
@@ -47,6 +52,7 @@ export default function GitVisualizerPage() {
           >
             {isLoading ? 'Loading…' : 'Open repo'}
           </button>
+
           {repoModel && !showingRepo && (
             <button
               type='button'
@@ -56,6 +62,7 @@ export default function GitVisualizerPage() {
               Show repo
             </button>
           )}
+
           {showingRepo && (
             <button
               type='button'
@@ -69,13 +76,15 @@ export default function GitVisualizerPage() {
       </header>
 
       <div className='border-b border-gray-200 dark:border-gray-800 px-8 py-4'>
-        <BranchOrderControls
-          order={order}
-          colorByBranch={colorByBranch}
-          isCustom={isCustom}
-          onMove={handleMove}
-          onReset={handleReset}
-        />
+        {showLaneControls ? (
+          <BranchOrderControls
+            order={order}
+            colorByBranch={colorByBranch}
+            isCustom={isCustom}
+            onMove={handleMove}
+            onReset={handleReset}
+          />
+        ) : null}
       </div>
 
       <div ref={scrollRef} className='flex-1 overflow-auto p-10'>

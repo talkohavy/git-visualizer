@@ -1,8 +1,5 @@
-import type { LayoutLabel } from '../../logic/layout';
-
-const CHAR_WIDTH = 9;
-const HORIZONTAL_PADDING = 14;
-const PILL_HEIGHT = 34;
+import { CHAR_WIDTH, HORIZONTAL_PADDING, PILL_HEIGHT } from '../../logic/constants';
+import type { LayoutLabel } from '../../types';
 
 type BranchLabelProps = {
   label: LayoutLabel;

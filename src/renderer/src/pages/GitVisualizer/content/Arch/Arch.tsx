@@ -1,4 +1,4 @@
-import type { LayoutEdge } from '../../logic/layout';
+import type { LayoutEdge } from '../../types';
 
 export type ArchProps = {
   edge: LayoutEdge;

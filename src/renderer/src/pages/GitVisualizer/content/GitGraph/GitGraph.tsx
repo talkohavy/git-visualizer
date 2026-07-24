@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
-import { computeLayout } from '../../logic/layout';
+import { computeLayout } from '../../logic/utils/computeLayout';
 import Arch from '../Arch';
 import BranchLabel from '../BranchLabel';
 import CommitNode from '../CommitNode';
-import type { GitModel } from '../../logic/types';
+import type { GitModel } from '@root/common/types';
 
 type GitGraphProps = {
   model: GitModel;

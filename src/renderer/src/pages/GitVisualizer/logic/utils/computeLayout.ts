@@ -1,16 +1,7 @@
-import {
-  NODE_RADIUS,
-  PADDING,
-  ROW_HEIGHT,
-  LANE_WIDTH,
-  LABEL_RESERVE,
-  type LayoutResult,
-  type LayoutEdge,
-  type LayoutLabel,
-  type LayoutNode,
-} from './constants';
-import { orderBranches } from './utils/orderBranches';
+import { NODE_RADIUS, PADDING, ROW_HEIGHT, LANE_WIDTH, LABEL_RESERVE } from '../constants';
+import { orderBranches } from './orderBranches';
 import type { GitModel } from '@root/common/types';
+import type { LayoutEdge, LayoutLabel, LayoutNode, LayoutResult } from '../../types';
 
 export function computeLayout(props: { model: GitModel; branchOrder?: string[] }) {
   const { model, branchOrder } = props;
