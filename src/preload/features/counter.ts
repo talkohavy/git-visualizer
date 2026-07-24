@@ -1,5 +1,5 @@
 import { ApiEvents } from '@root/common/constants';
-import { invoke, send, subscribe } from '../ipc/core';
+import { ipcService } from '../ipc-service';
 
 /**
  * `window.api.counter` - a counter whose state lives in the MAIN process.
@@ -10,7 +10,7 @@ import { invoke, send, subscribe } from '../ipc/core';
  *   - onChanged  -> subscribe  (main pushes the new value to every window)
  */
 export const counter = {
-  get: () => invoke(ApiEvents.CounterGet),
-  increment: (by = 1) => send(ApiEvents.CounterIncrement, by),
-  onChanged: (listener: (value: number) => void) => subscribe(ApiEvents.CounterChanged, listener),
+  get: () => ipcService.invoke(ApiEvents.CounterGet),
+  increment: (by = 1) => ipcService.send(ApiEvents.CounterIncrement, by),
+  onChanged: (listener: (value: number) => void) => ipcService.subscribe(ApiEvents.CounterChanged, listener),
 };

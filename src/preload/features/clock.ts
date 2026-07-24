@@ -1,5 +1,5 @@
 import { ApiEvents } from '@root/common/constants';
-import { send, subscribe } from '../ipc/core';
+import { ipcService } from '../ipc-service';
 
 /**
  * `window.api.clock` - a heartbeat emitted from MAIN.
@@ -7,6 +7,6 @@ import { send, subscribe } from '../ipc/core';
  *   - onTick     -> subscribe  (receive a timestamp roughly every second)
  */
 export const clock = {
-  setRunning: (running: boolean) => send(ApiEvents.ClockSetRunning, running),
-  onTick: (listener: (timestampMs: number) => void) => subscribe(ApiEvents.ClockTick, listener),
+  setRunning: (running: boolean) => ipcService.send(ApiEvents.ClockSetRunning, running),
+  onTick: (listener: (timestampMs: number) => void) => ipcService.subscribe(ApiEvents.ClockTick, listener),
 };
