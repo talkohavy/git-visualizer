@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { useIsCloseToEdge } from '@renderer/hooks/useIsCloseToEdge';
+import { useScrollToEdge } from '@renderer/hooks/useScrollToEdge';
 import { ipcClient } from '@renderer/lib/ipc';
 import GitGraph from '../content/GitGraph';
 import { EXAMPLES, type Example } from '../examples/examples';
@@ -12,6 +14,15 @@ export function useGitVisualizerPageLogic() {
   const [order, setOrder] = useState<string[]>([]);
   const [isCustom, setIsCustom] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  const { isCloseToEdge: isCloseToBottom, onScroll: onScrollToBottom } = useIsCloseToEdge({ to: 'bottom' });
+  const { scrollToEdge: scrollToBottom } = useScrollToEdge({ refElement: scrollRef, to: 'bottom' });
+
+  const { isCloseToEdge: isCloseToTop, onScroll: onScrollToTop } = useIsCloseToEdge({
+    to: 'top',
+    initialIsCloseToEdge: true,
+  });
+  const { scrollToEdge: scrollToTop } = useScrollToEdge({ refElement: scrollRef, to: 'top' });
 
   const [source, setSource] = useState<Source>('examples');
   const [repoModel, setRepoModel] = useState<GitModel | null>(null);
@@ -167,5 +178,11 @@ export function useGitVisualizerPageLogic() {
     isCustom,
     scrollRef,
     graphArea,
+    isCloseToBottom,
+    isCloseToTop,
+    onScrollToBottom,
+    onScrollToTop,
+    scrollToBottom,
+    scrollToTop,
   };
 }

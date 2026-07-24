@@ -1,4 +1,5 @@
 import Select from '@renderer/components/controls/Select';
+import DownArrow from '@renderer/components/svgs/DownArrow';
 import BranchOrderControls from './content/BranchOrderControls';
 import { useGitVisualizerPageLogic } from './logic/useGitVisualizerPageLogic';
 
@@ -23,6 +24,12 @@ export default function GitVisualizerPage() {
     isCustom,
     scrollRef,
     graphArea,
+    isCloseToBottom,
+    isCloseToTop,
+    onScrollToBottom,
+    onScrollToTop,
+    scrollToBottom,
+    scrollToTop,
   } = useGitVisualizerPageLogic();
 
   return (
@@ -87,8 +94,39 @@ export default function GitVisualizerPage() {
         ) : null}
       </div>
 
-      <div ref={scrollRef} className='flex-1 overflow-auto p-10'>
+      <div
+        ref={scrollRef}
+        onScroll={(e) => {
+          onScrollToBottom(e);
+          onScrollToTop(e);
+        }}
+        className='relative flex-1 overflow-auto p-10'
+      >
         {graphArea}
+
+        {!isCloseToBottom && (
+          <button
+            type='button'
+            onClick={scrollToBottom}
+            aria-label='Scroll to bottom'
+            title='Scroll to bottom'
+            className='fixed bottom-10 right-24 z-10 flex size-12 cursor-pointer items-center justify-center rounded-full border border-gray-300 bg-white text-gray-700 shadow-lg hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:hover:bg-gray-700'
+          >
+            <DownArrow className='size-4' />
+          </button>
+        )}
+
+        {!isCloseToTop && (
+          <button
+            type='button'
+            onClick={scrollToTop}
+            aria-label='Scroll to top'
+            title='Scroll to top'
+            className='fixed bottom-10 right-10 z-10 flex size-12 cursor-pointer items-center justify-center rounded-full border border-gray-300 bg-white text-gray-700 shadow-lg hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:hover:bg-gray-700'
+          >
+            <DownArrow className='size-4 rotate-180' />
+          </button>
+        )}
       </div>
     </div>
   );
