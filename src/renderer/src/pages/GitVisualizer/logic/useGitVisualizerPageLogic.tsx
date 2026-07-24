@@ -219,6 +219,11 @@ export function useGitVisualizerPageLogic() {
     setIsCustom(false);
   }
 
+  useEffect(() => {
+    const folderName = showingRepo && repoPath ? repoPath.split(/[\\/]/).filter(Boolean).pop() : null;
+    document.title = folderName ? folderName : 'Git Visualizer';
+  }, [showingRepo, repoPath]);
+
   const headerDescription = showingRepo ? (repoPath ?? 'Loaded repository') : (selectedExample?.description ?? '');
 
   const showRepoError = Boolean(loadError) && source === 'repo';
