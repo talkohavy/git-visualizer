@@ -9,10 +9,20 @@ export class CounterController {
   ) {}
 
   register(): void {
-    this.bridge.handle(ApiEvents.CounterGet, () => this.counterService.getCount());
+    this.getCount();
+    this.setCount();
+    this.counterIncrement();
+  }
 
-    this.bridge.on(ApiEvents.CounterIncrement, (_event, by) => this.counterService.increment(by));
+  private getCount() {
+    this.bridge.handle(ApiEvents.CounterGet, this.counterService.getCount);
+  }
 
+  private setCount() {
     this.counterService.onChange((value) => this.bridge.broadcast(ApiEvents.CounterChanged, value));
+  }
+
+  private counterIncrement() {
+    this.bridge.on(ApiEvents.CounterIncrement, (_event, by) => this.counterService.increment(by));
   }
 }

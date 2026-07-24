@@ -6,6 +6,10 @@ export class DialogController {
   constructor(private readonly bridge: IpcBridgeService) {}
 
   register(): void {
+    this.selectFolder();
+  }
+
+  private selectFolder() {
     this.bridge.handle(ApiEvents.DialogSelectFolder, async (event) => {
       const parent = BrowserWindow.fromWebContents(event.sender);
 

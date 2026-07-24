@@ -9,6 +9,10 @@ export class SystemController {
   ) {}
 
   register(): void {
+    this.getSystemInfo();
+  }
+
+  private getSystemInfo() {
     this.bridge.handle(ApiEvents.SystemGetInfo, this.systemService.getSystemInfo);
   }
 }
