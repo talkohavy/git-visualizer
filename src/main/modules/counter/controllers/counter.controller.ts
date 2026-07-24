@@ -15,11 +15,13 @@ export class CounterController {
   }
 
   private getCount() {
-    this.bridge.handle(ApiEvents.CounterGet, this.counterService.getCount);
+    this.bridge.handle(ApiEvents.CounterGet, this.counterService.getCount.bind(this.counterService));
   }
 
   private setCount() {
-    this.counterService.onChange((value) => this.bridge.broadcast(ApiEvents.CounterChanged, value));
+    this.counterService.onChange((value) => {
+      return this.bridge.broadcast(ApiEvents.CounterChanged, value);
+    });
   }
 
   private counterIncrement() {

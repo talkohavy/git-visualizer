@@ -22,7 +22,9 @@ export class DialogController {
 
       if (result.canceled || result.filePaths.length === 0) return null;
 
-      return result.filePaths[0] ?? null;
+      const retValue = result.filePaths[0] ?? null;
+
+      return retValue;
     });
   }
 }

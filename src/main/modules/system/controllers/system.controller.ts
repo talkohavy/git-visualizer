@@ -13,6 +13,6 @@ export class SystemController {
   }
 
   private getSystemInfo() {
-    this.bridge.handle(ApiEvents.SystemGetInfo, this.systemService.getSystemInfo);
+    this.bridge.handle(ApiEvents.SystemGetInfo, this.systemService.getSystemInfo.bind(this.systemService));
   }
 }
