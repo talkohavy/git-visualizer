@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { useDragToScroll } from '@renderer/hooks/useDragToScroll';
 import { useIsCloseToEdge } from '@renderer/hooks/useIsCloseToEdge';
 import { useScrollToEdge } from '@renderer/hooks/useScrollToEdge';
 import { ipcClient } from '@renderer/lib/ipc';
@@ -23,6 +24,8 @@ export function useGitVisualizerPageLogic() {
     initialIsCloseToEdge: true,
   });
   const { scrollToEdge: scrollToTop } = useScrollToEdge({ refElement: scrollRef, to: 'top' });
+
+  const { isDragging, dragHandlers } = useDragToScroll({ refElement: scrollRef });
 
   const [source, setSource] = useState<Source>('examples');
   const [repoModel, setRepoModel] = useState<GitModel | null>(null);
@@ -177,6 +180,8 @@ export function useGitVisualizerPageLogic() {
     colorByBranch,
     isCustom,
     scrollRef,
+    isDragging,
+    dragHandlers,
     graphArea,
     isCloseToBottom,
     isCloseToTop,

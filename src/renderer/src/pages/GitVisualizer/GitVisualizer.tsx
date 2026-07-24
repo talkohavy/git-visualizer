@@ -1,5 +1,6 @@
 import Select from '@renderer/components/controls/Select';
 import DownArrow from '@renderer/components/svgs/DownArrow';
+import clsx from 'clsx';
 import BranchOrderControls from './content/BranchOrderControls';
 import { useGitVisualizerPageLogic } from './logic/useGitVisualizerPageLogic';
 
@@ -23,6 +24,8 @@ export default function GitVisualizerPage() {
     colorByBranch,
     isCustom,
     scrollRef,
+    isDragging,
+    dragHandlers,
     graphArea,
     isCloseToBottom,
     isCloseToTop,
@@ -100,7 +103,11 @@ export default function GitVisualizerPage() {
           onScrollToBottom(e);
           onScrollToTop(e);
         }}
-        className='relative flex-1 overflow-auto p-10'
+        {...dragHandlers}
+        className={clsx(
+          'relative flex-1 overflow-auto p-10 select-none',
+          isDragging ? 'cursor-grabbing' : 'cursor-grab',
+        )}
       >
         {graphArea}
 
