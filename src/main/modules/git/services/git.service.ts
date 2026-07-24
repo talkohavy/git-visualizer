@@ -83,25 +83,31 @@ export class GitService {
     // Branch ref names cannot contain spaces, so a space cleanly separates the
     // name from the commit hash it points at. Include remote-tracking branches
     // (refs/remotes) so commits that are only pointed at by a remote branch
-    // still get a label.
+    // still get a label. `%(symref)` is non-empty only for symbolic refs; we use
+    // it to drop them (see the filter below).
     const stdout = await this.run(repoPath, [
       'for-each-ref',
-      '--format=%(refname:short) %(objectname)',
+      '--format=%(refname:short) %(objectname) %(symref)',
       'refs/heads',
       'refs/remotes',
     ]);
 
-    return stdout
-      .split('\n')
-      .map((line) => line.trim())
-      .filter((line) => line.length > 0)
-      .map((line) => {
-        const [name = '', tip = ''] = line.split(' ').filter(Boolean);
+    return (
+      stdout
+        .split('\n')
+        .map((line) => line.trim())
+        .filter((line) => line.length > 0)
+        .map((line) => {
+          const [name = '', tip = '', symref = ''] = line.split(' ').filter(Boolean);
 
-        return { name, tip };
-      })
-      // Skip symbolic refs like `origin/HEAD`, which merely alias another branch.
-      .filter((branch) => branch.name.length > 0 && !branch.name.endsWith('/HEAD'));
+          return { name, tip, symref };
+        })
+        // Skip symbolic refs such as `refs/remotes/origin/HEAD`, which merely alias
+        // another branch. Its short name is `origin` (not `origin/HEAD`), so it
+        // would otherwise appear as a phantom branch labelled "origin".
+        .filter((branch) => branch.name.length > 0 && branch.symref.length === 0)
+        .map(({ name, tip }) => ({ name, tip }))
+    );
   }
 
   private async readHead(repoPath: string): Promise<string> {
