@@ -8,10 +8,7 @@ export function computeLayout(props: { model: GitModel; branchOrder?: string[] }
   const { commits, branches, head } = model;
 
   const laneOrder = orderBranches({ model, override: branchOrder });
-  const laneByBranch = new Map<string, number>();
-  laneOrder.forEach((name, index) => {
-    laneByBranch.set(name, index);
-  });
+  const laneByBranch = assignLanes({ model, laneOrder });
 
   const colorByBranch = new Map<string, string>();
   branches.forEach((branch) => {
@@ -19,7 +16,13 @@ export function computeLayout(props: { model: GitModel; branchOrder?: string[] }
   });
 
   const maxOrder = commits.length > 0 ? commits.length - 1 : 0;
-  const maxLane = laneOrder.length > 0 ? laneOrder.length - 1 : 0;
+  let maxLane = 0;
+
+  laneByBranch.forEach((lane) => {
+    if (lane > maxLane) {
+      maxLane = lane;
+    }
+  });
 
   const positionByHash = new Map<string, { cx: number; cy: number }>();
   const nodes: LayoutNode[] = commits.map((commit) => {
@@ -99,6 +102,106 @@ export function computeLayout(props: { model: GitModel; branchOrder?: string[] }
   const result: LayoutResult = { nodes, edges, labels, width, height };
 
   return result;
+}
+
+/**
+ * Packs branches into lanes instead of giving every branch its own column.
+ *
+ * Each branch occupies a vertical interval `[fork, merge]`: from the order of
+ * the commit it forked off, up to the order of the commit that merges it back
+ * (or its own tip / the point a child departs from it, whichever is latest).
+ * We then greedily colour these intervals - walking branches in `laneOrder`
+ * (the crossing-minimizing priority) and assigning each the smallest lane whose
+ * current occupants don't overlap it.
+ *
+ * Consequence: `main` spans the whole history, so it keeps lane 0 and forces
+ * every side branch to lane >= 1. Two side branches that both fork from `main`
+ * both land on lane 1 - they only get bumped to lane 2, 3, ... when their
+ * vertical intervals actually collide. Branches that merely touch at a shared
+ * trunk commit (one merges in where the next forks off) do NOT collide.
+ */
+function assignLanes(props: { model: GitModel; laneOrder: string[] }): Map<string, number> {
+  const { model, laneOrder } = props;
+  const { commits } = model;
+
+  const orderByHash = new Map<string, number>();
+  const branchByHash = new Map<string, string>();
+  commits.forEach((commit) => {
+    orderByHash.set(commit.hash, commit.order);
+    branchByHash.set(commit.hash, commit.branch);
+  });
+
+  const ownMin = new Map<string, number>();
+  const ownMax = new Map<string, number>();
+  const forkParentHash = new Map<string, string | undefined>();
+
+  commits.forEach((commit) => {
+    const currentMin = ownMin.get(commit.branch);
+    if (currentMin === undefined || commit.order < currentMin) {
+      ownMin.set(commit.branch, commit.order);
+      forkParentHash.set(commit.branch, commit.parents[0]);
+    }
+
+    const currentMax = ownMax.get(commit.branch);
+    if (currentMax === undefined || commit.order > currentMax) {
+      ownMax.set(commit.branch, commit.order);
+    }
+  });
+
+  const start = new Map<string, number>();
+  const end = new Map<string, number>();
+
+  laneOrder.forEach((name) => {
+    const min = ownMin.get(name) ?? 0;
+    const max = ownMax.get(name) ?? 0;
+    const parentHash = forkParentHash.get(name);
+    const parentOrder = parentHash ? orderByHash.get(parentHash) : undefined;
+
+    start.set(name, parentOrder !== undefined && parentOrder < min ? parentOrder : min);
+    end.set(name, max);
+  });
+
+  // A commit on another branch that points back to this branch (a merge, or a
+  // child forking off it) keeps this lane busy until that later commit.
+  commits.forEach((commit) => {
+    commit.parents.forEach((parentHash) => {
+      const parentBranch = branchByHash.get(parentHash);
+
+      if (parentBranch && parentBranch !== commit.branch) {
+        const currentEnd = end.get(parentBranch);
+
+        if (currentEnd === undefined || commit.order > currentEnd) {
+          end.set(parentBranch, commit.order);
+        }
+      }
+    });
+  });
+
+  const laneByBranch = new Map<string, number>();
+  const lanes: { start: number; end: number }[][] = [];
+
+  laneOrder.forEach((name) => {
+    const from = start.get(name) ?? 0;
+    const to = end.get(name) ?? 0;
+
+    let chosen = lanes.findIndex((occupants) => {
+      const collides = occupants.some((interval) => from < interval.end && interval.start < to);
+
+      return !collides;
+    });
+
+    if (chosen === -1) {
+      chosen = lanes.length;
+      lanes.push([]);
+    }
+
+    const occupants = lanes[chosen] ?? [];
+    occupants.push({ start: from, end: to });
+    lanes[chosen] = occupants;
+    laneByBranch.set(name, chosen);
+  });
+
+  return laneByBranch;
 }
 
 function centerX(props: { lane: number }): number {
