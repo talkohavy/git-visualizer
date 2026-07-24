@@ -81,8 +81,15 @@ export class GitService {
 
   private async readBranches(repoPath: string): Promise<RawBranch[]> {
     // Branch ref names cannot contain spaces, so a space cleanly separates the
-    // name from the commit hash it points at.
-    const stdout = await this.run(repoPath, ['for-each-ref', '--format=%(refname:short) %(objectname)', 'refs/heads']);
+    // name from the commit hash it points at. Include remote-tracking branches
+    // (refs/remotes) so commits that are only pointed at by a remote branch
+    // still get a label.
+    const stdout = await this.run(repoPath, [
+      'for-each-ref',
+      '--format=%(refname:short) %(objectname)',
+      'refs/heads',
+      'refs/remotes',
+    ]);
 
     return stdout
       .split('\n')
@@ -92,7 +99,9 @@ export class GitService {
         const [name = '', tip = ''] = line.split(' ').filter(Boolean);
 
         return { name, tip };
-      });
+      })
+      // Skip symbolic refs like `origin/HEAD`, which merely alias another branch.
+      .filter((branch) => branch.name.length > 0 && !branch.name.endsWith('/HEAD'));
   }
 
   private async readHead(repoPath: string): Promise<string> {

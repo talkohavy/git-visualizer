@@ -42,3 +42,7 @@ export const LABEL_RESERVE = 220;
 export const CHAR_WIDTH = 9;
 export const HORIZONTAL_PADDING = 14;
 export const PILL_HEIGHT = 34;
+/**
+ * Horizontal gap between branch labels that share the same commit tip.
+ */
+export const LABEL_GAP = 8;

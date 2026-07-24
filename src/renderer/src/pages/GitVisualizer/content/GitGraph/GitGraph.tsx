@@ -11,6 +11,12 @@ type GitGraphProps = {
   onCommitClick?: (hash: string) => void;
 };
 
+/**
+ * Renders the SVG at a fraction of its intrinsic size (viewBox stays full-size),
+ * so the whole graph — nodes, text, strokes and spacing — scales down uniformly.
+ */
+const SCALE = 0.6;
+
 export default function GitGraph(props: GitGraphProps) {
   const { model, branchOrder, onCommitClick } = props;
 
@@ -18,8 +24,8 @@ export default function GitGraph(props: GitGraphProps) {
 
   return (
     <svg
-      width={layout.width}
-      height={layout.height}
+      width={layout.width * SCALE}
+      height={layout.height * SCALE}
       viewBox={`0 0 ${layout.width} ${layout.height}`}
       className='block'
       role='img'

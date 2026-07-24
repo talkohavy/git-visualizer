@@ -1,4 +1,13 @@
-import { NODE_RADIUS, PADDING, ROW_HEIGHT, LANE_WIDTH, LABEL_RESERVE } from '../constants';
+import {
+  NODE_RADIUS,
+  PADDING,
+  ROW_HEIGHT,
+  LANE_WIDTH,
+  LABEL_RESERVE,
+  CHAR_WIDTH,
+  HORIZONTAL_PADDING,
+  LABEL_GAP,
+} from '../constants';
 import { orderBranches } from './orderBranches';
 import type { GitModel } from '@root/common/types';
 import type { LayoutEdge, LayoutLabel, LayoutNode, LayoutResult } from '../../types';
@@ -75,7 +84,18 @@ export function computeLayout(props: { model: GitModel; branchOrder?: string[] }
     });
   });
 
+  const pillWidth = (name: string): number => {
+    const text = name === head ? `* ${name}` : name;
+
+    return text.length * CHAR_WIDTH + HORIZONTAL_PADDING * 2;
+  };
+
   const labels: LayoutLabel[] = [];
+  // Multiple branches can point at the same commit (e.g. a local branch and its
+  // remote-tracking counterpart). Stack their pills horizontally so they don't
+  // render on top of each other.
+  const offsetByTip = new Map<string, number>();
+  let maxLabelRight = 0;
   branches.forEach((branch) => {
     if (!branch.tip) {
       return;
@@ -87,16 +107,30 @@ export function computeLayout(props: { model: GitModel; branchOrder?: string[] }
       return;
     }
 
+    const offset = offsetByTip.get(branch.tip) ?? 0;
+    const x = tipPosition.cx + NODE_RADIUS + 16 + offset;
+    offsetByTip.set(branch.tip, offset + pillWidth(branch.name) + LABEL_GAP);
+
     labels.push({
       name: branch.name,
-      x: tipPosition.cx + NODE_RADIUS + 16,
+      x,
       y: tipPosition.cy,
       color: branch.color,
       isHead: branch.name === head,
     });
+
+    const rightEdge = x + pillWidth(branch.name);
+    if (rightEdge > maxLabelRight) {
+      maxLabelRight = rightEdge;
+    }
   });
 
-  const width = PADDING * 2 + NODE_RADIUS * 2 + maxLane * LANE_WIDTH + LABEL_RESERVE;
+  // Reserve enough room on the right so the longest (possibly stacked) label
+  // isn't clipped by the SVG viewBox; fall back to LABEL_RESERVE when there are
+  // no labels.
+  const laneRight = PADDING + NODE_RADIUS + maxLane * LANE_WIDTH;
+  const labelReserve = Math.max(LABEL_RESERVE, maxLabelRight - laneRight + PADDING);
+  const width = PADDING * 2 + NODE_RADIUS * 2 + maxLane * LANE_WIDTH + labelReserve;
   const height = PADDING * 2 + NODE_RADIUS * 2 + maxOrder * ROW_HEIGHT;
 
   const result: LayoutResult = { nodes, edges, labels, width, height };
