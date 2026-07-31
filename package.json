@@ -9,7 +9,7 @@
   "scripts": {
     "clean": "rm -rf node_modules",
     "dev": "electron-vite dev",
-    "build": "npm run typecheck && electron-vite build",
+    "build": "npm run tsc && electron-vite build",
     "lint": "eslint .",
     "format": "biome format ./src",
     "format:fix": "biome format --verbose ./src --write",
