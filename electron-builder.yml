@@ -1,5 +1,5 @@
 appId: com.electron.app
-productName: git-visualizer2
+productName: git-visualizer
 directories:
   buildResources: build
 files:
@@ -12,7 +12,7 @@ files:
 asarUnpack:
   - resources/**
 win:
-  executableName: git-visualizer2
+  executableName: git-visualizer
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
