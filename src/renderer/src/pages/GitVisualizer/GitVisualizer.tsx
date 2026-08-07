@@ -5,7 +5,7 @@ import BranchFilter from './content/BranchFilter';
 import BranchOrderControls from './content/BranchOrderControls';
 import { useGitVisualizerPageLogic } from './logic/useGitVisualizerPageLogic';
 
-const showLaneControls = false;
+const showLaneControls = true;
 
 export default function GitVisualizerPage() {
   const {
