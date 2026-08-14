@@ -37,6 +37,9 @@ export default defineConfig({
     },
   },
   renderer: {
+    server: {
+      port: Number(process.env.PORT ?? 9000),
+    },
     /**
      * root defaults to src/renderer.
      */
